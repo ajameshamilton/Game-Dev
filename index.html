@@ -36,6 +36,8 @@ var brickOffsetTop = 30;
 var brickOffsetLeft = 30;
 var score = 0;
 var scoreColor= getRandomColor();
+var lives = 3;
+var livesColor = getRandomColor();
     
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);   
@@ -92,6 +94,12 @@ function drawScore() {
     ctx.fillStyle = scoreColor;
     ctx.fillText("Score: "+score, 8, 20);
 }
+    
+function drawLives() {
+    ctx.font = "16px Arial";
+    ctx.fillStyle = livesColor;
+    ctx.fillText("Lives: "+lives, canvas.width-65, 20);
+}
 
 function draw() {
 if(x + dx > canvas.width-ballRadius || x + dx < ballRadius) {
@@ -105,8 +113,18 @@ if(y + dy < ballRadius) {
         dy = -dy;
     }
     else {
-        alert("GAME OVER");
-        document.location.reload();
+        lives--;
+if(!lives) {
+    alert("GAME OVER");
+    document.location.reload();
+}
+else {
+    x = canvas.width/2;
+    y = canvas.height-30;
+    dx = 2;
+    dy = -2;
+    paddleX = (canvas.width-paddleWidth)/2;
+}
     }
 }
     
@@ -123,9 +141,11 @@ else if(leftPressed && paddleX > 0) {
     drawPaddle();
     drawBricks();
     drawScore();
+    drawLives();
     collisionDetection(); 
     x += dx;
     y += dy;
+requestAnimationFrame(draw);
 }
     
 function getRandomColor() {
@@ -182,7 +202,7 @@ function mouseMoveHandler(e) {
     }
 }    
  
-setInterval(draw, 10);
+draw();
     
     
 </script>
