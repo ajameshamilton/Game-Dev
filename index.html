@@ -34,6 +34,8 @@ var brickHeight = 20;
 var brickPadding = 10;
 var brickOffsetTop = 30;
 var brickOffsetLeft = 30;
+var score = 0;    
+    
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);   
     
@@ -83,6 +85,12 @@ function drawBall() {
     ctx.closePath();
 }
 
+function drawScore() {
+    ctx.font = "16px Arial";
+    ctx.fillStyle = "#0095DD";
+    ctx.fillText("Score: "+score, 8, 20);
+}
+
 function draw() {
 if(x + dx > canvas.width-ballRadius || x + dx < ballRadius) {
     ballColor = getRandomColor();
@@ -112,6 +120,7 @@ else if(leftPressed && paddleX > 0) {
     drawBall();
     drawPaddle();
     drawBricks();
+    drawScore();
     collisionDetection(); 
     x += dx;
     y += dy;
@@ -135,6 +144,11 @@ function collisionDetection() {
                     dy = -dy;
                     b.status = 0;
                     ballColor= getRandomColor();
+                    score++;
+                    if(score == brickRowCount*brickColumnCount) {
+                        alert("YOU WIN, CONGRATULATIONS!");
+                        document.location.reload();
+                    }
                 }
             }
         }
